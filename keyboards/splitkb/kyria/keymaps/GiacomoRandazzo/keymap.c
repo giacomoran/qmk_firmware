@@ -67,6 +67,7 @@ enum keycodes_custom {
 // Function keys on hold
 // NOTE: See below. We use dummy layer tap keys, see https://getreuer.info/posts/keyboards/triggers/index.html#tap-vs.-long-press
 #define GUI_SPC  LT(0, KC_1)
+#define OPT_SPC  LT(0, KC_2)
 
 // Key + modifier
 #define G_LEFT   LGUI(KC_LEFT)
@@ -80,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_MINS,
         KC_TAB,   CTL_A,   ALT_S,   GUI_D,   SFT_F,    KC_G,                                        KC_H,   SFT_J,   GUI_K,   ALT_L,  CTL_SC, KC_QUOT,
         KC_ESC,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_EQL,
-                                  KC_MCTL, KC_BSPC, GUI_SPC, NAV_SPC, OSM_SFT, SYM_ENT,  NUM_BP, FUN_DEL, _______, _______
+                                  KC_MCTL, OPT_SPC, GUI_SPC, NAV_SPC, OSM_SFT, SYM_ENT,  NUM_BP, FUN_DEL, _______, _______
     ),
 
     [_NAV] = LAYOUT(
@@ -159,6 +160,29 @@ static bool process_tap_or_hold_gui_spc(keyrecord_t* record) {
     return false;
 }
 
+// Dual role key OPT_SPC:
+// - on tap  [⌥ ␣]
+// - on hold [⌥]
+// See GUI_SPC above for refs.
+static bool process_tap_or_hold_opt_spc(keyrecord_t* record) {
+    // On tap press
+    if (record->tap.count > 0 && record->event.pressed) {
+        tap_code16(LALT(KC_SPC));
+    }
+
+    // On hold press
+    if (record->tap.count == 0 && record->event.pressed) {
+        register_code(KC_LALT);
+    }
+    // On hold release
+    if (record->tap.count == 0 && !record->event.pressed) {
+        unregister_code(KC_LALT);
+    }
+
+    // Skip default handling
+    return false;
+}
+
 // Intercept key events
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Enable Getreuer features
@@ -168,6 +192,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GUI_SPC:
             return process_tap_or_hold_gui_spc(record);
+        case OPT_SPC:
+            return process_tap_or_hold_opt_spc(record);
     }
     return true;
 }

@@ -4,10 +4,9 @@
 -   [home-row mods](https://precondition.github.io/home-row-mods)
 -   one-shot [⇧] in left thumb, double tap to caps-lock
 -   double role tap [⌘ ␣] and hold [⌘] in left thumb
+-   double role tap [⌥ ␣] and hold [⌥] in left thumb
 -   [Achordion](https://getreuer.info/posts/keyboards/achordion/index.html)
 -   [Select Word](https://getreuer.info/posts/keyboards/select-word/index.html)
--   additional backspace on the left thumb for mouse use
--
 
 ## Flashing
 
